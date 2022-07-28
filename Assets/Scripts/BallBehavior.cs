@@ -12,16 +12,22 @@ public class BallBehavior : MonoBehaviour
     int pointsAmount;
         
 
-    private void OnMouseDown()
+    void OnMouseDown()
     {
         gameManager = FindObjectOfType<GameManager>();
 
-        Transform ballScale = GetComponent<Transform>();
+        CalculatePoints();
 
-        pointsAmount = Mathf.RoundToInt((1 / ballScale.localScale.x) * 10);
         gameManager.AddScore(pointsAmount);
         
         Destroy(gameObject);
+    }
+
+    void CalculatePoints()
+    {
+        Transform ballScale = GetComponent<Transform>();
+
+        pointsAmount = Mathf.RoundToInt((1 / ballScale.localScale.x) * 10);
     }
 
 }
