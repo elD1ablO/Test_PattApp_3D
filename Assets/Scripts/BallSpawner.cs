@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject ballPrefab;
+    [SerializeField] GameObject ballPrefab;    
         
     float spawnPositionX = 8.5f;
     float spawnPositionY = 9f;
@@ -13,13 +13,18 @@ public class BallSpawner : MonoBehaviour
     float maxSpawnDelay = 2f;
     float currentDelay = 1f;
 
-    float minBallSize = 0.3f;
+    float minBallSize = 0.5f;
     float maxBallSize = 2f;
     public float currentScale;
 
     float gravityModifier = 1f;
 
+    float lvlIncreaseModifier = 0;
+    float lvlIncreaseStep = 0.1f;
+
     Rigidbody rb;
+
+    GameObject newBall;
 
     void FixedUpdate()
     {        
@@ -27,7 +32,7 @@ public class BallSpawner : MonoBehaviour
 
         if (currentDelay <= 0)
         {
-            GameObject newBall = Instantiate(ballPrefab, new Vector3(Random.Range(-spawnPositionX, spawnPositionX), spawnPositionY, 0), Quaternion.identity);
+            newBall = Instantiate(ballPrefab, new Vector3(Random.Range(-spawnPositionX, spawnPositionX), spawnPositionY, 0), Quaternion.identity);
 
             Material ballColor = newBall.GetComponent<Renderer>().material;
             ballColor.SetColor("_Color", GetRandomColor()); 
@@ -38,17 +43,21 @@ public class BallSpawner : MonoBehaviour
             newBallScale.localScale = new Vector3 (currentScale, currentScale, currentScale);
 
             rb = newBall.GetComponent<Rigidbody>();
+            rb.velocity = Vector3.down * Mathf.Abs(gravityModifier / (currentScale - lvlIncreaseModifier));            
 
-            rb.velocity = Vector3.down * gravityModifier/currentScale;
-            
-
-            currentDelay = Random.Range(minSpawnDelay, maxSpawnDelay);
-        }              
-
+            //приклад не самого кльового костиля  =) але хоч шось.
+            currentDelay = Random.Range(Mathf.Abs(minSpawnDelay - lvlIncreaseModifier), Mathf.Abs(maxSpawnDelay - lvlIncreaseModifier));
+        }
     }
+   
 
     Color GetRandomColor()
     {
         return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+    }
+
+    public void IncreaseModifier()
+    {
+        lvlIncreaseModifier += lvlIncreaseStep;
     }
 }

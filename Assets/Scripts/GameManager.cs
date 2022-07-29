@@ -6,9 +6,15 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] BallSpawner ballSpawner;
+
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI levelNumberText;
-    
+
+    [SerializeField] GameObject abLoader;
+
+    BundleLoadAsync bundleLoader;
+
     int scoreToAdd;
     int totalScore = 0;
 
@@ -17,6 +23,7 @@ public class GameManager : MonoBehaviour
     int currentLevel = 1;
 
     bool isLevelTextShown = false;
+
 
 
     private void Update()
@@ -45,14 +52,28 @@ public class GameManager : MonoBehaviour
      
     IEnumerator ShowLevelChangeMessage(string levelText, float delay)
     {
-        
+        ballSpawner.IncreaseModifier();
+        //LoadNewBundle();
         levelNumberText.enabled = true;
         levelNumberText.text = levelText;
         scoreToNextLevel += scoreIncrease;        
         yield return new WaitForSeconds(delay);
         levelNumberText.enabled = false;
         currentLevel++;
+
         isLevelTextShown = false;
     }
     
+    public int GetCurrentLvl()
+    {
+        return currentLevel;
+    }
+
+    /*void LoadNewBundle()
+    {
+        abLoader.SetActive(false);
+        abLoader.SetActive(true);
+        bundleLoader = abLoader.GetComponent<BundleLoadAsync>();
+        bundleLoader.LoadNewBG(currentLevel - 1);
+    }*/
 }
