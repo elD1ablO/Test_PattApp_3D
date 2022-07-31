@@ -12,10 +12,25 @@ public class BundleLoadAsync : MonoBehaviour
 
     [SerializeField] GameObject background;
 
-    int lvlIndex;
+    int lvlIndex = 0;
     int newIndex;
     
-    IEnumerator Start()
+    void Awake()
+    {
+        StartCoroutine(LoadNewBG(lvlIndex));
+    }
+
+    void Update()
+    {
+        
+    }
+
+    public void ReloadBG(int index)
+    {
+        StartCoroutine(LoadNewBG(index));
+    }
+
+    IEnumerator LoadNewBG(int index)
     {
         AssetBundleCreateRequest asyncBundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, bundleName));
         yield return asyncBundleRequest;
@@ -28,22 +43,13 @@ public class BundleLoadAsync : MonoBehaviour
             yield break;
         }
 
-        AssetBundleRequest assetRequest = localAssetBundle.LoadAssetAsync<Sprite>(assetName[0]);
+        AssetBundleRequest assetRequest = localAssetBundle.LoadAssetAsync<Sprite>(assetName[index]);
         yield return assetRequest;
 
         Sprite newBG = assetRequest.asset as Sprite;
         background.GetComponent<SpriteRenderer>().sprite = newBG;
-        //Instantiate(newBG);
 
         localAssetBundle.Unload(false);
     }
-    /*
-    public void LoadNewBG(int index)
-    {
-        lvlIndex = index;
-    }
-    void LoadNewBG()
-    {
-        lvlIndex = newIndex;
-    }*/
+
 }

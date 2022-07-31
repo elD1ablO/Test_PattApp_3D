@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject abLoader;
 
-    BundleLoadAsync bundleLoader;
+    [SerializeField] BundleLoadAsync bundleLoader;
 
     int scoreToAdd;
     int totalScore = 0;
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         {
             isLevelTextShown = true;
             StartCoroutine(ShowLevelChangeMessage($"Level {currentLevel}", 3));
+            bundleLoader.ReloadBG(currentLevel - 1);
 
         }
     }
@@ -69,11 +70,5 @@ public class GameManager : MonoBehaviour
         return currentLevel;
     }
 
-    /*void LoadNewBundle()
-    {
-        abLoader.SetActive(false);
-        abLoader.SetActive(true);
-        bundleLoader = abLoader.GetComponent<BundleLoadAsync>();
-        bundleLoader.LoadNewBG(currentLevel - 1);
-    }*/
+    
 }

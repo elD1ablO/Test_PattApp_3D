@@ -425,6 +425,7 @@ MonoBehaviour:
   scoreText: {fileID: 192867781}
   levelNumberText: {fileID: 553762728}
   abLoader: {fileID: 73166245}
+  bundleLoader: {fileID: 73166248}
 --- !u!4 &220936778
 Transform:
   m_ObjectHideFlags: 0
