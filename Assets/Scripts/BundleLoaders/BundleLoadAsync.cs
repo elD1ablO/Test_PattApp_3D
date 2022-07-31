@@ -7,14 +7,14 @@ using System.IO;
 public class BundleLoadAsync : MonoBehaviour
 {
 
-    [SerializeField] string bundleName = "testbundle";
+    [SerializeField] string bundleName = "test";
     [SerializeField] string[] assetName = new[] { "BG1", "BG2", "BG3" };
+
+    [SerializeField] GameObject background;
+
     int lvlIndex;
     int newIndex;
-    void OnEnable()
-    {
-        LoadNewBG();
-    }
+    
     IEnumerator Start()
     {
         AssetBundleCreateRequest asyncBundleRequest = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, bundleName));
@@ -28,14 +28,16 @@ public class BundleLoadAsync : MonoBehaviour
             yield break;
         }
 
-        AssetBundleRequest assetRequest = localAssetBundle.LoadAssetAsync<GameObject>(assetName[lvlIndex]);
+        AssetBundleRequest assetRequest = localAssetBundle.LoadAssetAsync<Sprite>(assetName[0]);
         yield return assetRequest;
 
-        GameObject prefab = assetRequest.asset as GameObject;
-        Instantiate(prefab);
+        Sprite newBG = assetRequest.asset as Sprite;
+        background.GetComponent<SpriteRenderer>().sprite = newBG;
+        //Instantiate(newBG);
 
         localAssetBundle.Unload(false);
     }
+    /*
     public void LoadNewBG(int index)
     {
         lvlIndex = index;
@@ -43,5 +45,5 @@ public class BundleLoadAsync : MonoBehaviour
     void LoadNewBG()
     {
         lvlIndex = newIndex;
-    }
+    }*/
 }
